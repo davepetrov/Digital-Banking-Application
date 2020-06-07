@@ -1,106 +1,190 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static boolean quit = false;
-    private static Bank bank = new Bank("cibc");
+    private static ArrayList<Bank> banks = new ArrayList<Bank>();
+    private static ArrayList<String> majorBanks = new ArrayList<>(Arrays.asList("CIBC", "TD", "ScotiaBank", "BMO", "RBC"));
+
 
     public static void main(String[] args) {
-        printOptions();
-        while (!quit){
-            System.out.println("\n1 - Print Available Options");
-            int opt = scanner.nextInt();scanner.nextLine();
-            String customerName;
-            String senderName;
-            String recipientName;
-            String s_branchName;
-            String r_branchName;
-            String branchName;
-            double initTransaction;
-            double transaction;
-            switch (opt){
-                case 0:
-                    System.out.println("\nExiting Bank...");
-                    quit=true;
-                    break;
-                case 1:
-                    printOptions();
-                    break;
-                case 2:
-                    System.out.println("Enter name of customer");
-                    customerName = scanner.nextLine();
+        String customerName;
+        String senderName;
+        String recipientName;
+        String branchName;
+        String userName;
+        double initTransaction;
+        double transaction;
+        spawnBanks();
+        System.out.println("Welcome to the ATM. Select you bank");
+        printBanks();
+        Bank bank = selectBank();
+        System.out.println("Welcome to "+bank.getName());
+        System.out.println("Are you a Bank root user[0] or Customer[1]?");
+        int mode = scanner.nextInt();scanner.nextLine();
+        switch (mode){
+            case 0:
+                printRootOptions();
+                while (!quit){
+                    System.out.println("\n1 - Print Available Options");
+                    int opt = scanner.nextInt();scanner.nextLine();
+                    switch (opt){
+                        case 0:
+                            System.out.println("\nExiting [Root Mode] Bank...");
+                            quit=true;
+                            break;
+                        case 1:
+                            printRootOptions();
+                            break;
+                        case 2:
+                            System.out.println("Enter name of customer");
+                            customerName = scanner.nextLine();
 
-                    System.out.println("Enter deposit amount");
-                    initTransaction = scanner.nextDouble();scanner.nextLine();
+                            System.out.println("Enter deposit amount");
+                            initTransaction = scanner.nextDouble();scanner.nextLine();
 
-                    System.out.println("Enter name of branch");
-                    branchName = scanner.nextLine();
+                            System.out.println("Enter name of branch");
+                            branchName = scanner.nextLine();
 
-                    if (bank.addCustomer(branchName, customerName, initTransaction)){
-                        System.out.println(customerName+" added to branch "+branchName);
+                            if (bank.addCustomer(branchName, customerName, initTransaction)){
+                                System.out.println(customerName+" added to branch "+branchName);
+                            }
+                            else{
+                                System.out.println("Error: Something went wrong. Please check inputs...");
+                            }
+                            break;
+                        case 3:
+                            System.out.println("Enter name of branch");
+                            branchName = scanner.nextLine();
+                            bank.showCustomers(branchName, true);
+                            break;
+                        case 4:
+                            System.out.println("Enter name of branch");
+                            branchName = scanner.nextLine();
+                            bank.addBranch(branchName);
+                            break;
+                        case 5:
+                            bank.listBranches();
+                            break;
                     }
-                    else{
-                        System.out.println("Error: Something went wrong. Please check inputs...");
+                }
+                break;
+            case 1:
+                System.out.println("What is your name");
+                userName = scanner.nextLine();
+                if (!bank.isCustomer(userName)){
+                    System.out.println("Not a customer of "+bank.getName());
+                    break;
+                }
+                while (!quit){
+                    System.out.println("\n1 - Print Available Options");
+                    int opt = scanner.nextInt();scanner.nextLine();
+                    switch (opt){
+                        case 0:
+                            System.out.println("\nExiting [User Mode] Bank...");
+                            quit=true;
+                            break;
+                        case 1:
+                            printUserOptions();
+                            break;
+                        case 2:
+                            System.out.println("Enter name of recipient");
+                            recipientName = scanner.nextLine();
+
+                            System.out.println("Enter sending amount");
+                            transaction = scanner.nextDouble();
+                            scanner.nextLine();
+
+                            if (bank.addTransaction(userName, recipientName, transaction)) {
+                                System.out.println("Success: Transaction complete");
+                            } else {
+                                System.out.println("Error: Something went wrong. Please check inputs.");
+                            }
+                            break;
+
+
+                        case 3:
+                            System.out.println("Enter withdraw amount");
+                            transaction = scanner.nextDouble();scanner.nextLine();
+                            if (bank.customerWithdraw(userName, transaction)){
+                                System.out.println("Withdrew" + transaction);
+                            }
+                            else{
+                                System.out.println("Not part of bank");
+                            }
+                            break;
+                        case 4:
+                            System.out.println("Enter deposit amount");
+                            transaction = scanner.nextDouble();scanner.nextLine();
+                            bank.customerDeposit(userName, transaction);
+                            break;
                     }
-                    break;
-                case 3:
-                    System.out.println("Enter name of sender");
-                    senderName = scanner.nextLine();
-
-                    System.out.println("Enter name of recipient");
-                    recipientName = scanner.nextLine();
-
-                    System.out.println("Enter transaction amount");
-                    transaction = scanner.nextDouble();scanner.nextLine();
-
-                    if (bank.addTransaction(senderName, recipientName, transaction)){
-                        System.out.println("Success: Transaction complete");
-                    }
-                    else{
-                        System.out.println("Error: Something went wrong. Please check inputs...");
-                    }
-                    break;
-                case 4:
-                    System.out.println("Enter name of branch");
-                    branchName = scanner.nextLine();
-                    bank.showCustomers(branchName, true);
-                    break;
-                case 5:
-                    System.out.println("Enter name of branch");
-                    branchName = scanner.nextLine();
-                    bank.addBranch(branchName);
-                    break;
-                case 6:
-                    bank.listBranches();
-                    break;
-                case  7:
-                    System.out.println("Enter name of customer");
-                    customerName = scanner.nextLine();
-
-                    System.out.println("Enter withdraw amount");
-                    transaction = scanner.nextDouble();scanner.nextLine();
-                    bank.customerWithdraw(customerName, transaction);
-                    break;
-                case 8:
-                    System.out.println("Enter name of customer");
-                    customerName = scanner.nextLine();
-
-                    System.out.println("Enter withdraw amount");
-                    transaction = scanner.nextDouble();scanner.nextLine();
-                    bank.customerDeposit(customerName, transaction);
-                    break;
-            }
+                }
+                break;
+            default:
+                System.out.println("Not valid mode");
         }
     }
-    private static void printOptions() {
+
+    private boolean hasBankAccount(String customerName){
+        for (int i =0; i<banks.size(); i++){
+            if (banks.get(i).isCustomer(customerName)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private static Bank createBank(String name){
+        return new Bank(name);
+    }
+
+    private static void spawnBanks(){
+        for (int i = 0; i<majorBanks.size(); i++){
+            banks.add(createBank(majorBanks.get(i)));
+        }
+    }
+    private Bank queryBank(String name){
+        for (int i = 0; i<banks.size(); i++){
+            if (banks.get(i).getName().equals(name)){
+                return banks.get(i);
+            }
+        }
+        return null;
+    }
+
+    private static void printBanks(){
+        for (int i = 0; i<banks.size(); i++){
+            System.out.println((i+1)+" - "+majorBanks.get(i));
+        }
+    }
+
+    private static Bank selectBank() {
+        while (true) {
+            int opt = scanner.nextInt();scanner.nextLine();
+            if (0<opt && opt<=banks.size()) {
+                return banks.get(opt-1);
+            }
+            else if (opt!=0){
+                System.out.println("Invalid Bank");
+            }
+            printBanks();
+        }
+    }
+    private static void printRootOptions() {
         System.out.println("0 - Quit");
         System.out.println("1 - Print Options");
         System.out.println("2 - Add customer");
-        System.out.println("3 - Add transaction (2 customers)");
-        System.out.println("4 - Show Customers");
-        System.out.println("5 - Add branch");
-        System.out.println("6 - list branches");
-        System.out.println("7 - Customer Withdraw");
-        System.out.println("8 - Customer Deposit");
+        System.out.println("3 - Show Customers");
+        System.out.println("4 - Add branch");
+        System.out.println("5 - list branches");
+    }
+    private static void printUserOptions() {
+        System.out.println("0 - Quit");
+        System.out.println("1 - Print Options");
+        System.out.println("2 - Add transaction (2 customers)");
+        System.out.println("3 - Customer Withdraw");
+        System.out.println("4 - Customer Deposit");
     }
 }

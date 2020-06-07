@@ -56,6 +56,18 @@ public class Bank {
         }
         return null;
     }
+    public boolean isCustomer(String customerName){
+        for (int i =0; i<this.branches.size(); i++){
+            Branch branch = branches.get(i);
+            for (int j=0; i<branch.getCustomers().size(); i++){
+                if (branch.getCustomers().get(j).getName().equals(customerName)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean customerWithdraw(String customerName, double amt){
         Branch branch = fetchBranch(customerName);
         if (branch!=null){
@@ -107,4 +119,13 @@ public class Bank {
             System.out.println((i+1) + "->" +branches.get(i).getName());
         }
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Branch> getBranches() {
+        return branches;
+    }
+
 }
