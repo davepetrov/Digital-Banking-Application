@@ -11,24 +11,27 @@ public class Customer {
         this.amount = amount;
     }
 
-    public void creditAccount(double amount){
+    public boolean creditAccount(double amount){
         this.amount-=amount;
         if (this.amount<0){
-            System.out.println(this.name + "Is in debt. Add more balance.");
+            System.out.println(this.name + "Is in debt. Add more balance. Transaction failed");
+            return false;
         }
+        return true;
     }
 
-    public void debitAccount(double amount) {
+    public boolean debitAccount(double amount) {
         this.amount+=amount;
+        return true;
     }
 
-    public void addTransaction(double amt) {
+    public boolean addTransaction(double amt) {
         transactions.add(amt);
         if (amt<0){
-            creditAccount(amt);
+            return creditAccount(amt);
         }
         else{
-            debitAccount(amt);
+            return debitAccount(amt);
         }
     }
 

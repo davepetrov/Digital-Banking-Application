@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Bank {
     private String name;
     private ArrayList<Branch> branches = new ArrayList<Branch>();
+    private double amount = 1000000000;
 
     public Bank(String name) {
         this.name = name;
@@ -71,18 +72,14 @@ public class Bank {
     public boolean customerWithdraw(String customerName, double amt){
         Branch branch = fetchBranch(customerName);
         if (branch!=null){
-            branch.customerWithdraw(customerName, amt);
-            addTransaction(branch.getName(), customerName, amt);
-            return true;
+            return branch.customerWithdraw(customerName, amt) && addTransaction(branch.getName(), customerName, amt);
         }
         return false;
     }
     public boolean customerDeposit(String customerName, double amt){
         Branch branch = fetchBranch(customerName);
         if (branch!=null){
-            branch.customerDeposit(customerName, amt);
-            addTransaction(branch.getName(), customerName, amt);
-            return true;
+            return branch.customerDeposit(customerName, amt) && addTransaction(branch.getName(), customerName, amt);
         }
         return false;
     }

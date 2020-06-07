@@ -20,8 +20,6 @@ public class Branch {
         Customer customer = queryCustomer(name);
 
         if (customer!=null){
-            //System.out.println("Adding "+amt+" to "+name);
-            //System.out.println("Remmoving "+amt+" from "+name);
             customer.addTransaction(amt);
         }
         System.out.println(name+"is not a customer of the branch. Unable to add transaction.");
@@ -35,17 +33,21 @@ public class Branch {
         }
         return null;
     }
-    public void customerWithdraw(String name,double amt){
+    public boolean customerWithdraw(String name,double amt){
         Customer customer = queryCustomer(name);
         if (customer!=null){
             customer.withdraw(amt);
+            return true;
         }
+        return false;
     }
-    public void customerDeposit(String name,double amt){
+    public boolean customerDeposit(String name,double amt){
         Customer customer = queryCustomer(name);
         if (customer!=null){
             customer.deposit(amt);
+            return true;
         }
+        return false;
     }
 
     public ArrayList<Customer> getCustomers() {

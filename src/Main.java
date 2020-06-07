@@ -22,7 +22,7 @@ public class Main {
         printBanks();
         Bank bank = selectBank();
         System.out.println("Welcome to "+bank.getName());
-        System.out.println("Are you a Bank root user[0] or Customer[1]?");
+        System.out.println("Are you a Bank root user[0] or Customer at an ATM[1]?");
         int mode = scanner.nextInt();scanner.nextLine();
         switch (mode){
             case 0:
@@ -72,10 +72,13 @@ public class Main {
                 }
                 break;
             case 1:
+                System.out.println("Entering ATM associated with "+bank.getName());
                 System.out.println("What is your name");
                 userName = scanner.nextLine();
-                if (!bank.isCustomer(userName)){
-                    System.out.println("Not a customer of "+bank.getName());
+
+
+                if (!hasAccount(userName)){
+                    System.out.println("User does not have a bankaccount. Please enter a bank to register for an account");
                     break;
                 }
                 while (!quit){
@@ -99,7 +102,8 @@ public class Main {
 
                             if (bank.addTransaction(userName, recipientName, transaction)) {
                                 System.out.println("Success: Transaction complete");
-                            } else {
+                            }
+                            else {
                                 System.out.println("Error: Something went wrong. Please check inputs.");
                             }
                             break;
@@ -159,6 +163,14 @@ public class Main {
             System.out.println((i+1)+" - "+majorBanks.get(i));
         }
     }
+    private static boolean hasAccount(String accountName){
+        for (int i = 0; i<banks.size(); i++){
+            if (banks.get(i).isCustomer(accountName)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static Bank selectBank() {
         while (true) {
@@ -183,7 +195,7 @@ public class Main {
     private static void printUserOptions() {
         System.out.println("0 - Quit");
         System.out.println("1 - Print Options");
-        System.out.println("2 - Add transaction (2 customers)");
+        System.out.println("2 - Add transaction (E-transfer) to...)");
         System.out.println("3 - Customer Withdraw");
         System.out.println("4 - Customer Deposit");
     }
