@@ -2,20 +2,42 @@ import java.util.ArrayList;
 
 public class Customer {
     private String name;
-
+    private double amount;
     private ArrayList<Double> transactions = new ArrayList<Double>();
 
-    public Customer(String name, double initialTransaction) {
+    public Customer(String name, double amount) {
         this.name = name;
-        addTransaction((initialTransaction));
+        addTransaction((amount));
+        this.amount = amount;
     }
 
-    public boolean addTransaction(double amt) {
-        if (0 < amt) {
-            transactions.add(amt);
-            return true;
+    public void creditAccount(double amount){
+        this.amount-=amount;
+        if (this.amount<0){
+            System.out.println(this.name + "Is in debt. Add more balance.");
         }
-        return false;
+    }
+
+    public void debitAccount(double amount) {
+        this.amount+=amount;
+    }
+
+    public void addTransaction(double amt) {
+        transactions.add(amt);
+        if (amt<0){
+            creditAccount(amt);
+        }
+        else{
+            debitAccount(amt);
+        }
+    }
+
+    public void deposit(double amt){
+        this.amount+=amt;
+    }
+
+    public void withdraw(double amt){
+        this.amount-=amt;
     }
 
     public String getName() {

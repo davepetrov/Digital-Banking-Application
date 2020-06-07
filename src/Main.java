@@ -11,6 +11,10 @@ public class Main {
             System.out.println("\n1 - Print Available Options");
             int opt = scanner.nextInt();scanner.nextLine();
             String customerName;
+            String senderName;
+            String recipientName;
+            String s_branchName;
+            String r_branchName;
             String branchName;
             double initTransaction;
             double transaction;
@@ -26,30 +30,30 @@ public class Main {
                     System.out.println("Enter name of customer");
                     customerName = scanner.nextLine();
 
-                    System.out.println("Enter transaction amount");
+                    System.out.println("Enter deposit amount");
                     initTransaction = scanner.nextDouble();scanner.nextLine();
 
                     System.out.println("Enter name of branch");
                     branchName = scanner.nextLine();
 
                     if (bank.addCustomer(branchName, customerName, initTransaction)){
-                        System.out.println(customerName+"added to branch"+branchName);
+                        System.out.println(customerName+" added to branch "+branchName);
                     }
                     else{
                         System.out.println("Error: Something went wrong. Please check inputs...");
                     }
                     break;
                 case 3:
-                    System.out.println("Enter name of customer");
-                    customerName = scanner.nextLine();
+                    System.out.println("Enter name of sender");
+                    senderName = scanner.nextLine();
+
+                    System.out.println("Enter name of recipient");
+                    recipientName = scanner.nextLine();
 
                     System.out.println("Enter transaction amount");
                     transaction = scanner.nextDouble();scanner.nextLine();
 
-                    System.out.println("Enter name of branch");
-                    branchName = scanner.nextLine();
-
-                    if (bank.addTransaction(branchName, customerName, transaction)){
+                    if (bank.addTransaction(senderName, recipientName, transaction)){
                         System.out.println("Success: Transaction complete");
                     }
                     else{
@@ -69,6 +73,22 @@ public class Main {
                 case 6:
                     bank.listBranches();
                     break;
+                case  7:
+                    System.out.println("Enter name of customer");
+                    customerName = scanner.nextLine();
+
+                    System.out.println("Enter withdraw amount");
+                    transaction = scanner.nextDouble();scanner.nextLine();
+                    bank.customerWithdraw(customerName, transaction);
+                    break;
+                case 8:
+                    System.out.println("Enter name of customer");
+                    customerName = scanner.nextLine();
+
+                    System.out.println("Enter withdraw amount");
+                    transaction = scanner.nextDouble();scanner.nextLine();
+                    bank.customerDeposit(customerName, transaction);
+                    break;
             }
         }
     }
@@ -76,9 +96,11 @@ public class Main {
         System.out.println("0 - Quit");
         System.out.println("1 - Print Options");
         System.out.println("2 - Add customer");
-        System.out.println("3 - Add transaction");
+        System.out.println("3 - Add transaction (2 customers)");
         System.out.println("4 - Show Customers");
         System.out.println("5 - Add branch");
-        System.out.println("6 - list branchs");
+        System.out.println("6 - list branches");
+        System.out.println("7 - Customer Withdraw");
+        System.out.println("8 - Customer Deposit");
     }
 }
