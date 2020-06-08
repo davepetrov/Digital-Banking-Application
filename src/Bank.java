@@ -47,7 +47,7 @@ public class Bank {
         return false;
     }
 
-    private Branch fetchBranch(String customerName){
+    public Branch fetchBranch(String customerName){
         for (int i =0; i<this.branches.size(); i++){
             if (branches.get(i).hasCustomer(customerName)){
                 return branches.get(i);
@@ -114,6 +114,17 @@ public class Bank {
             }
         }
         return null;
+    }
+
+    public double customerAmount(String name){
+        Branch branch = fetchBranch(name);
+        if (branch!=null ){
+            Customer customer = branch.queryCustomer(name);
+            if(customer!=null) {
+                return customer.getAmount();
+            }
+        }
+        return -1;
     }
 
     public void listBranches(){

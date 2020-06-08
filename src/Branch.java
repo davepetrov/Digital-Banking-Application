@@ -25,7 +25,7 @@ public class Branch {
         System.out.println(name+" is not a customer of the branch. Unable to add transaction.");
         return false;
     }
-    private Customer queryCustomer(String name){
+    public Customer queryCustomer(String name){
         for (int i=0; i<customers.size(); i++){
             if (customers.get(i).getName().equals(name)){
                 return customers.get(i);

@@ -76,6 +76,7 @@ public class Main {
                 System.out.println("What is your name?"); //Add security token
                 userName = scanner.nextLine();
                 Bank userBankAccount = queryBank(userName);
+                System.out.println("You currently have "+userBankAccount.customerAmount(userName)+" in your account associated with "+userBankAccount.getName());
                 if (userBankAccount != null) {
                     while (!quit) {
                         System.out.println("\n1 - Print Available Options");
@@ -110,7 +111,7 @@ public class Main {
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
                                 if (bank.customerWithdraw(bank.getName(), userName, transaction)) {
-                                    System.out.println("Withdrew" + transaction);
+                                    System.out.println("Success: Withdrew" + transaction);
                                 } else {
                                     System.out.println("Error: Insufficient balance to withdraw");
                                 }
@@ -120,7 +121,7 @@ public class Main {
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
                                 if (bank.customerDeposit(bank.getName(), userName, transaction)){
-                                    System.out.println("Deposited " + transaction +" Successfully");
+                                    System.out.println("Success: Deposited " + transaction );
                                 }
                                 else{
                                     System.out.println("Error: Something went wrong. Did not deposit");
@@ -128,7 +129,14 @@ public class Main {
 
                                 break;
                             case 5:
-                                System.out.println("Your associated branch for ");
+                                if(userBankAccount.getName().equals(bank.getName())) {
+                                    System.out.println("\nYour personal associated branch with " + userBankAccount+ "->"+userBankAccount.fetchBranch(userName).getName());
+                                }
+                                else{
+                                    System.out.println("\nThis feature is UNAVAILABLE. Please visit an atm associated with your branch for access.");
+                                }
+                            case 6:
+                                System.out.println("\nYour balance is "+userBankAccount.customerAmount(userName));
                         }
                     }
                     break;
@@ -199,6 +207,7 @@ public class Main {
         System.out.println("2 - Add transaction (E-transfer) to...)");
         System.out.println("3 - Customer Withdraw");
         System.out.println("4 - Customer Deposit");
-        System.out.println("5 - Find my branch");
+        System.out.println("5 - Find my associated branch");
+        System.out.println("6 - Current Balance");
     }
 }

@@ -43,6 +43,10 @@ public class Customer {
         return name;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
     public ArrayList<Double> getTransactions() {
         return transactions;
     }
