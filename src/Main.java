@@ -73,72 +73,74 @@ public class Main {
                 break;
             case 1:
                 System.out.println("Entering ATM associated with "+bank.getName());
-                System.out.println("What is your name");
+                System.out.println("What is your name?"); //Add security token
                 userName = scanner.nextLine();
+                Bank userBankAccount = queryBank(userName);
+                if (userBankAccount != null) {
+                    while (!quit) {
+                        System.out.println("\n1 - Print Available Options");
+                        int opt = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (opt) {
+                            case 0:
+                                System.out.println("\nExiting [User Mode] Bank...");
+                                quit = true;
+                                break;
+                            case 1:
+                                printUserOptions();
+                                break;
+                            case 2:
+                                System.out.println("Enter name of recipient");
+                                recipientName = scanner.nextLine();
 
-                if (!hasAccount(userName)){
-                    System.out.println("User does not have a bankaccount. Please enter a bank to register for an account");
+                                System.out.println("Enter sending amount");
+                                transaction = scanner.nextDouble();
+                                scanner.nextLine();
+
+                                if (bank.addTransaction(userName, recipientName, transaction)) {
+                                    System.out.println("Success: Transaction complete");
+                                } else {
+                                    System.out.println("Error: Something went wrong. Please check inputs.");
+                                }
+                                break;
+
+
+                            case 3:
+                                System.out.println("Enter withdraw amount");
+                                transaction = scanner.nextDouble();
+                                scanner.nextLine();
+                                if (bank.customerWithdraw(bank.getName(), userName, transaction)) {
+                                    System.out.println("Withdrew" + transaction);
+                                } else {
+                                    System.out.println("Error: Insufficient balance to withdraw");
+                                }
+                                break;
+                            case 4:
+                                System.out.println("Enter deposit amount");
+                                transaction = scanner.nextDouble();
+                                scanner.nextLine();
+                                if (bank.customerDeposit(bank.getName(), userName, transaction)){
+                                    System.out.println("Deposited " + transaction +" Successfully");
+                                }
+                                else{
+                                    System.out.println("Error: Something went wrong. Did not deposit");
+                                }
+
+                                break;
+                            case 5:
+                                System.out.println("Your associated branch for ");
+                        }
+                    }
+                    break;
+                } else {
+                    System.out.println("User does not have a bank account. Please register for an account at a bank. ");
                     break;
                 }
-                while (!quit){
-                    System.out.println("\n1 - Print Available Options");
-                    int opt = scanner.nextInt();scanner.nextLine();
-                    switch (opt){
-                        case 0:
-                            System.out.println("\nExiting [User Mode] Bank...");
-                            quit=true;
-                            break;
-                        case 1:
-                            printUserOptions();
-                            break;
-                        case 2:
-                            System.out.println("Enter name of recipient");
-                            recipientName = scanner.nextLine();
-
-                            System.out.println("Enter sending amount");
-                            transaction = scanner.nextDouble();
-                            scanner.nextLine();
-
-                            if (bank.addTransaction(userName, recipientName, transaction)) {
-                                System.out.println("Success: Transaction complete");
-                            }
-                            else {
-                                System.out.println("Error: Something went wrong. Please check inputs.");
-                            }
-                            break;
-
-
-                        case 3:
-                            System.out.println("Enter withdraw amount");
-                            transaction = scanner.nextDouble();scanner.nextLine();
-                            if (bank.customerWithdraw(userName, transaction)){
-                                System.out.println("Withdrew" + transaction);
-                            }
-                            else{
-                                System.out.println("Not part of bank");
-                            }
-                            break;
-                        case 4:
-                            System.out.println("Enter deposit amount");
-                            transaction = scanner.nextDouble();scanner.nextLine();
-                            bank.customerDeposit(userName, transaction);
-                            break;
-                    }
-                }
-                break;
             default:
                 System.out.println("Not valid mode");
         }
     }
 
-    private boolean hasBankAccount(String customerName){
-        for (int i =0; i<banks.size(); i++){
-            if (banks.get(i).hasCustomer(customerName)){
-                return true;
-            }
-        }
-        return false;
-    }
     private static Bank createBank(String name){
         return new Bank(name);
     }
@@ -148,19 +150,13 @@ public class Main {
             banks.add(createBank(majorBanks.get(i)));
         }
     }
-    private Bank queryBank(String name){
+    private static Bank queryBank(String accountName){
         for (int i = 0; i<banks.size(); i++){
-            if (banks.get(i).getName().equals(name)){
+            if (banks.get(i).hasCustomer(accountName)){
                 return banks.get(i);
             }
         }
         return null;
-    }
-
-    private static void printBanks(){
-        for (int i = 0; i<banks.size(); i++){
-            System.out.println((i+1)+" - "+majorBanks.get(i));
-        }
     }
     private static boolean hasAccount(String accountName){
         for (int i = 0; i<banks.size(); i++){
@@ -169,6 +165,12 @@ public class Main {
             }
         }
         return false;
+    }
+
+    private static void printBanks(){
+        for (int i = 0; i<banks.size(); i++){
+            System.out.println((i+1)+" - "+majorBanks.get(i));
+        }
     }
 
     private static Bank selectBank() {
@@ -197,5 +199,6 @@ public class Main {
         System.out.println("2 - Add transaction (E-transfer) to...)");
         System.out.println("3 - Customer Withdraw");
         System.out.println("4 - Customer Deposit");
+        System.out.println("5 - Find my branch");
     }
 }

@@ -6,6 +6,7 @@ public class Bank {
     private String name;
     private ArrayList<Branch> branches = new ArrayList<Branch>();
     private double amount = 1000000000;
+    private double serviceFee = 3.27;   //Average. May depend on individual bank.
 
     public Bank(String name) {
         this.name = name;
@@ -66,26 +67,33 @@ public class Bank {
         return false;
     }
 
-    public boolean customerWithdraw(String customerName, double amt){
+    public boolean customerWithdraw(String atm, String customerName, double amt){
         Branch branch = fetchBranch(customerName);
-        if (branch!=null){
-            return branch.customerWithdraw(customerName, amt) && addTransaction(branch.getName(), customerName, amt);
+        if (branch!=null) {
+            if (!atm.equals(this.name)) {
+                System.out.println("Service free of " + this.serviceFee + " will be charged");
+            }
+            return branch.customerWithdraw(customerName, amt) && addTransaction(branch.getName(), customerName, amt * -1) && addTransaction(branch.getName(), customerName, -1 * this.serviceFee);
+
         }
         return false;
     }
-    public boolean customerDeposit(String customerName, double amt){
+
+    public boolean customerDeposit(String atm, String customerName, double amt){
         Branch branch = fetchBranch(customerName);
-        if (branch!=null){
-            return branch.customerDeposit(customerName, amt) && addTransaction(branch.getName(), customerName, amt);
+        if (branch != null) {
+            if (!atm.equals(this.name)) {
+                System.out.println("Service free of " + this.serviceFee + " will be charged");
+            }
+            return branch.customerDeposit(customerName, amt) && addTransaction(branch.getName(), customerName, amt) && addTransaction(branch.getName(), customerName, -1*this.serviceFee);
+
         }
         return false;
     }
 
     public boolean showCustomers(String branchName, boolean showTransaction){
         Branch branch = queryBranch(branchName);
-        if (queryBranch(branchName) == null) {
-            return false;
-        }
+        if (queryBranch(branchName) == null) return false;
         Customer customer;
         for (int i=0; i<branch.getCustomers().size(); i++){
             customer = branch.getCustomers().get(i);
@@ -117,9 +125,4 @@ public class Bank {
     public String getName() {
         return name;
     }
-
-    public ArrayList<Branch> getBranches() {
-        return branches;
-    }
-
 }

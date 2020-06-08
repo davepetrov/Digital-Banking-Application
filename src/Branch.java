@@ -27,7 +27,7 @@ public class Branch {
     }
     private Customer queryCustomer(String name){
         for (int i=0; i<customers.size(); i++){
-            if (customers.get(i).getName() == name){
+            if (customers.get(i).getName().equals(name)){
                 return customers.get(i);
             }
         }
