@@ -27,12 +27,8 @@ public class Customer {
 
     public boolean addTransaction(double amt) {
         transactions.add(amt);
-        if (amt<0){
-            return creditAccount(amt);
-        }
-        else{
-            return debitAccount(amt);
-        }
+        if (amt<0)return creditAccount(amt);
+        else return debitAccount(amt);
     }
 
     public void deposit(double amt){

@@ -76,7 +76,6 @@ public class Main {
                 System.out.println("What is your name");
                 userName = scanner.nextLine();
 
-
                 if (!hasAccount(userName)){
                     System.out.println("User does not have a bankaccount. Please enter a bank to register for an account");
                     break;
@@ -134,7 +133,7 @@ public class Main {
 
     private boolean hasBankAccount(String customerName){
         for (int i =0; i<banks.size(); i++){
-            if (banks.get(i).isCustomer(customerName)){
+            if (banks.get(i).hasCustomer(customerName)){
                 return true;
             }
         }
@@ -165,7 +164,7 @@ public class Main {
     }
     private static boolean hasAccount(String accountName){
         for (int i = 0; i<banks.size(); i++){
-            if (banks.get(i).isCustomer(accountName)){
+            if (banks.get(i).hasCustomer(accountName)){
                 return true;
             }
         }

@@ -22,7 +22,7 @@ public class Branch {
         if (customer!=null){
             customer.addTransaction(amt);
         }
-        System.out.println(name+"is not a customer of the branch. Unable to add transaction.");
+        System.out.println(name+" is not a customer of the branch. Unable to add transaction.");
         return false;
     }
     private Customer queryCustomer(String name){
@@ -33,6 +33,16 @@ public class Branch {
         }
         return null;
     }
+
+    public boolean hasCustomer(String name){
+        for (int i=0; i<customers.size(); i++){
+            if (customers.get(i).getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean customerWithdraw(String name,double amt){
         Customer customer = queryCustomer(name);
         if (customer!=null){

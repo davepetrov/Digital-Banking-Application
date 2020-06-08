@@ -48,16 +48,13 @@ public class Bank {
 
     private Branch fetchBranch(String customerName){
         for (int i =0; i<this.branches.size(); i++){
-            Branch branch = branches.get(i);
-            for (int j=0; i<branch.getCustomers().size(); i++){
-                if (branch.getCustomers().get(j).getName().equals(customerName)){
-                    return branch;
-                }
+            if (branches.get(i).hasCustomer(customerName)){
+                return branches.get(i);
             }
         }
         return null;
     }
-    public boolean isCustomer(String customerName){
+    public boolean hasCustomer(String customerName){
         for (int i =0; i<this.branches.size(); i++){
             Branch branch = branches.get(i);
             for (int j=0; i<branch.getCustomers().size(); i++){
