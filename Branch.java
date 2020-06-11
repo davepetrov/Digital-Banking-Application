@@ -8,16 +8,16 @@ public class Branch {
         this.name = name;
     }
 
-    public boolean addCustomer(String name, double amt){
-        if (queryCustomer(name)!=null){
+    public boolean addCustomer(String customerId,String email, String name, double amt){
+        if (queryCustomer(customerId)!=null){
             return false;
         }
-        customers.add(new Customer(name, amt));
+        customers.add(new Customer(customerId, email, name, amt));
         return true;
     }
 
-    public boolean addTransaction(String name, double amt){
-        Customer customer = queryCustomer(name);
+    public boolean addTransaction(String customerId, double amt){
+        Customer customer = queryCustomer(customerId);
 
         if (customer!=null){
             customer.addTransaction(amt);
@@ -25,25 +25,26 @@ public class Branch {
         System.out.println(name+" is not a customer of the branch. Unable to add transaction.");
         return false;
     }
-    public Customer queryCustomer(String name){
+    public Customer queryCustomer(String customerId){
         for (int i=0; i<customers.size(); i++){
-            if (customers.get(i).getName().equals(name)){
-                return customers.get(i);
+            Customer customer = customers.get(i);
+            if (customer.getId().equals(customerId)){
+                return customer;
             }
         }
         return null;
     }
 
-    public boolean hasCustomer(String name){
+    public boolean hasCustomer(String customerId){
         for (int i=0; i<customers.size(); i++){
-            if (customers.get(i).getName().equals(name)){
+            if (customers.get(i).getId().equals(customerId)){
                 return true;
             }
         }
         return false;
     }
 
-    public boolean customerWithdraw(String name,double amt){
+    public boolean customerWithdraw(String customerId,double amt){
         Customer customer = queryCustomer(name);
         if (customer!=null){
             customer.withdraw(amt);
@@ -51,8 +52,8 @@ public class Branch {
         }
         return false;
     }
-    public boolean customerDeposit(String name,double amt){
-        Customer customer = queryCustomer(name);
+    public boolean customerDeposit(String customerId,double amt){
+        Customer customer = queryCustomer(customerId);
         if (customer!=null){
             customer.deposit(amt);
             return true;

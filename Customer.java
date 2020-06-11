@@ -1,22 +1,26 @@
 import java.util.ArrayList;
 
 public class Customer {
+    private String id;
+    private String email;
     private String name;
     private double amount;
     private ArrayList<Double> transactions = new ArrayList<Double>();
 
-    public Customer(String name, double amount) {
+    public Customer(String id, String email, String name, double amount) {
+        this.id = id;
+        this.email = email;
         this.name = name;
         addTransaction((amount));
         this.amount = amount;
     }
 
     public boolean creditAccount(double amount){
-        this.amount-=amount;
-        if (this.amount<0){
-            System.out.println(this.name + "Is in debt. Add more balance. Transaction failed");
+        if (this.amount-amount<0){
+            System.out.println("Transaction failed: "+this.name + " has a negative balance.");
             return false;
         }
+        this.amount-=amount;
         return true;
     }
 
@@ -37,6 +41,14 @@ public class Customer {
 
     public void withdraw(double amt){
         this.amount-=amt;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {

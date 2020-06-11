@@ -11,11 +11,11 @@ public class Main {
 
     public static void main(String[] args) {
         String customerName;
-        String senderName;
-        String recipientName;
+        String customerEmail;
+        String recipientEmail;
         String branchName;
         String userName;
-        double initTransaction;
+        double initDeposit;
         double transaction;
         spawnBanks();
         System.out.println("Welcome to the ATM. Select you bank");
@@ -42,13 +42,16 @@ public class Main {
                             System.out.println("Enter name of customer");
                             customerName = scanner.nextLine();
 
-                            System.out.println("Enter deposit amount");
-                            initTransaction = scanner.nextDouble();scanner.nextLine();
+                            System.out.println("Enter email of customer");
+                            customerEmail = scanner.nextLine();
+
+                            System.out.println("Enter initializing deposit amount");
+                            initDeposit = scanner.nextDouble();scanner.nextLine();
 
                             System.out.println("Enter name of branch");
                             branchName = scanner.nextLine();
 
-                            if (bank.addCustomer(branchName, customerName, initTransaction)){
+                            if (bank.addCustomer(branchName, customerEmail, customerName, initDeposit)){
                                 System.out.println(customerName+" added to branch "+branchName);
                             }
                             else{
@@ -73,9 +76,9 @@ public class Main {
                 break;
             case 1:
                 System.out.println("Entering ATM associated with "+bank.getName());
-                System.out.println("What is your name?"); //Add security token
-                userName = scanner.nextLine();
-                Bank userBankAccount = queryBank(userName);
+                System.out.println("What is your registered email?"); //Add security token
+                userEmail = scanner.nextLine();
+                Bank userBankAccount = queryBank(userEmail);
                 System.out.println("You currently have "+userBankAccount.customerAmount(userName)+" in your account associated with "+userBankAccount.getName());
                 if (userBankAccount != null) {
                     while (!quit) {
@@ -91,14 +94,14 @@ public class Main {
                                 printUserOptions();
                                 break;
                             case 2:
-                                System.out.println("Enter name of recipient");
-                                recipientName = scanner.nextLine();
+                                System.out.println("Enter email of recipient");
+                                recipientEmail = scanner.nextLine();
 
                                 System.out.println("Enter sending amount");
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
 
-                                if (bank.addTransaction(userName, recipientName, transaction)) {
+                                if (bank.addTransaction(userName, transaction) && bank.addTransaction(recipientEmail, transaction)) {
                                     System.out.println("Success: Transaction complete");
                                 } else {
                                     System.out.println("Error: Something went wrong. Please check inputs.");
@@ -158,21 +161,13 @@ public class Main {
             banks.add(createBank(majorBanks.get(i)));
         }
     }
-    private static Bank queryBank(String accountName){
+    private static Bank queryBank(String accountEmail){
         for (int i = 0; i<banks.size(); i++){
-            if (banks.get(i).hasCustomer(accountName)){
+            if (banks.get(i).hasCustomer(accountEmail)){
                 return banks.get(i);
             }
         }
         return null;
-    }
-    private static boolean hasAccount(String accountName){
-        for (int i = 0; i<banks.size(); i++){
-            if (banks.get(i).hasCustomer(accountName)){
-                return true;
-            }
-        }
-        return false;
     }
 
     private static void printBanks(){
@@ -204,7 +199,7 @@ public class Main {
     private static void printUserOptions() {
         System.out.println("0 - Quit");
         System.out.println("1 - Print Options");
-        System.out.println("2 - Add transaction (E-transfer) to...)");
+        System.out.println("2 - Add transaction (E-transfer to...)");
         System.out.println("3 - Customer Withdraw");
         System.out.println("4 - Customer Deposit");
         System.out.println("5 - Find my associated branch");
