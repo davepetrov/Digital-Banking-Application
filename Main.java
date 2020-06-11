@@ -10,13 +10,18 @@ public class Main {
 
 
     public static void main(String[] args) {
+        //User mode
+        String userEmail;
+        String recipientEmail;
+        Bank recipientBank;
+        double transaction;
+
+        //Root mode
         String customerName;
         String customerEmail;
-        String recipientEmail;
         String branchName;
-        String userName;
         double initDeposit;
-        double transaction;
+
         spawnBanks();
         System.out.println("Welcome to the ATM. Select you bank");
         printBanks();
@@ -79,7 +84,7 @@ public class Main {
                 System.out.println("What is your registered email?"); //Add security token
                 userEmail = scanner.nextLine();
                 Bank userBankAccount = queryBank(userEmail);
-                System.out.println("You currently have "+userBankAccount.customerAmount(userName)+" in your account associated with "+userBankAccount.getName());
+                System.out.println("You currently have "+userBankAccount.customerAmount(userEmail)+" in your account associated with "+userBankAccount.getName());
                 if (userBankAccount != null) {
                     while (!quit) {
                         System.out.println("\n1 - Print Available Options");
@@ -101,7 +106,7 @@ public class Main {
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
 
-                                if (bank.addTransaction(userName, transaction) && bank.addTransaction(recipientEmail, transaction)) {
+                                if (bank.addTransaction(userEmail, recipientEmail, transaction *(-1) )) {
                                     System.out.println("Success: Transaction complete");
                                 } else {
                                     System.out.println("Error: Something went wrong. Please check inputs.");
@@ -113,7 +118,7 @@ public class Main {
                                 System.out.println("Enter withdraw amount");
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
-                                if (bank.customerWithdraw(bank.getName(), userName, transaction)) {
+                                if (bank.customerWithdraw(bank.getName(), userEmail, transaction)) {
                                     System.out.println("Success: Withdrew" + transaction);
                                 } else {
                                     System.out.println("Error: Insufficient balance to withdraw");
@@ -123,7 +128,7 @@ public class Main {
                                 System.out.println("Enter deposit amount");
                                 transaction = scanner.nextDouble();
                                 scanner.nextLine();
-                                if (bank.customerDeposit(bank.getName(), userName, transaction)){
+                                if (bank.customerDeposit(bank.getName(), userEmail, transaction)){
                                     System.out.println("Success: Deposited " + transaction );
                                 }
                                 else{
@@ -133,13 +138,13 @@ public class Main {
                                 break;
                             case 5:
                                 if(userBankAccount.getName().equals(bank.getName())) {
-                                    System.out.println("\nYour personal associated branch with " + userBankAccount+ "->"+userBankAccount.fetchBranch(userName).getName());
+                                    System.out.println("\nYour personal associated branch with " + userBankAccount+ "->"+userBankAccount.fetchBranch(userEmail).getName());
                                 }
                                 else{
                                     System.out.println("\nThis feature is UNAVAILABLE. Please visit an atm associated with your branch for access.");
                                 }
                             case 6:
-                                System.out.println("\nYour balance is "+userBankAccount.customerAmount(userName));
+                                System.out.println("\nYour balance is "+userBankAccount.customerAmount(userEmail));
                         }
                     }
                     break;
@@ -161,10 +166,11 @@ public class Main {
             banks.add(createBank(majorBanks.get(i)));
         }
     }
-    private static Bank queryBank(String accountEmail){
+    public static Bank queryBank(String accountEmail){
         for (int i = 0; i<banks.size(); i++){
-            if (banks.get(i).hasCustomer(accountEmail)){
-                return banks.get(i);
+            Bank bank = banks.get(i);
+            if (bank.hasCustomer(accountEmail, 'e')){
+                return bank;
             }
         }
         return null;

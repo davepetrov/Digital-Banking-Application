@@ -40,15 +40,21 @@ public class Bank {
         return false;
     }
 
-    public boolean addTransaction(String senderName, String recipientEmail, double amt){
-        Branch s_branch = fetchBranch(senderName);
+    public boolean addTransaction(String senderEmail, String recipientEmail, double amt){
+        String customerId = getCustomerID(senderEmail);
+        Branch s_branch = fetchBranch(customerId);
+
+        String recipientId = getCustomerID(recipientEmail);
+        Branch r_branch = fetchBranch(recipientEmail);
+        Bank r_bank = Main.queryBank(recipientEmail);
 
         if (r_branch!= null && s_branch!=null){
-            return r_branch.addTransaction(recipientName, amt) && s_branch.addTransaction(senderName, -1*amt);
+            return s_branch.addTransaction(customerId, amt) && r_branch.addTransaction(recipientId, -1*amt);
         }
         return false;
     }
 
+    //For withdraw, deposit
     public boolean addTransaction(String customerId, double amt){
         Branch branch = fetchBranch(customerId);
         if (branch!= null){
@@ -88,7 +94,7 @@ public class Bank {
         }
         for (int i =0; i<this.branches.size(); i++){
             Branch branch = branches.get(i);
-            if (branch.queryCustomer(customerId)){
+            if (branch.hasCustomer(customerId)){
                 return true;
             }
         }
@@ -96,25 +102,27 @@ public class Bank {
         return false;
     }
 
-    public boolean customerWithdraw(String atm, String customerId, double amt){
+    public boolean customerWithdraw(String atmName, String customerEmail, double amt){
+        String customerId = getCustomerID(customerEmail);
         Branch branch = fetchBranch(customerId);
         if (branch!=null) {
-            if (!atm.equals(this.name)) {
+            if (!atmName.equals(this.name)) {
                 System.out.println("Service free of " + this.serviceFee + " will be charged");
             }
-            return branch.customerWithdraw(customerId, amt) && addTransaction(branch.getName(), customerId, amt * -1) && addTransaction(branch.getName(), customerId, -1 * this.serviceFee);
+            return branch.customerWithdraw(customerId, amt) && addTransaction(customerId, -1*this.serviceFee);
 
         }
         return false;
     }
 
-    public boolean customerDeposit(String atm, String customerId, double amt){
+    public boolean customerDeposit(String atmName, String customerEmail, double amt){
+        String customerId = getCustomerID(customerEmail);
         Branch branch = fetchBranch(customerId);
         if (branch != null) {
-            if (!atm.equals(this.name)) {
+            if (!atmName.equals(this.name)) {
                 System.out.println("Service free of " + this.serviceFee + " will be charged");
             }
-            return branch.customerDeposit(customerId, amt) && addTransaction(branch.getName(), customerId, amt) && addTransaction(branch.getName(), customerId, -1*this.serviceFee);
+            return branch.customerDeposit(customerId, amt) && branch.addTransaction(customerId, -1*this.serviceFee);
 
         }
         return false;
@@ -145,10 +153,11 @@ public class Bank {
         return null;
     }
 
-    public double customerAmount(String name){
-        Branch branch = fetchBranch(name);
+    public double customerAmount(String customerEmail){
+        String customerID = getCustomerID(customerEmail);
+        Branch branch = fetchBranch(customerID);
         if (branch!=null ){
-            Customer customer = branch.queryCustomer(name);
+            Customer customer = branch.queryCustomer(customerID);
             if(customer!=null) {
                 return customer.getAmount();
             }
