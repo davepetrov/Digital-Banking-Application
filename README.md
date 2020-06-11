@@ -12,11 +12,11 @@
 - **List branches**
 
 ### User
-- **Interact Etransfer** feature (Must specify the name of person to etransfer)
-- **Withdraw** (Default service fee will be charged if the bank associated with the current atm is not associated with the user of the atm)
+- **Interact Etransfer**  (Must specify the email of person to etransfer, sender bank verifies if reciepient is valid)
+- **Withdraw** (Default service fee will be charged if the bank associated with the current atm is not associated with the current user of the atm)
 - **Deposit** (Same restrictions as withdrawing)
-- **Find associated branch** (The bank associated with the atm must be associated with the customer for this option)
-- **Current Balance** (Returns the current balance of the user if the user is associated with the bank of the atm)
+- **Find associated branch** (Returns user's personal branch if the user is associated with the bank of the atm)
+- **Current Balance** (Returns the current balance of the user in the bank accoaunt associated with the user)
 
 ## To-do(s)
 1. Add security token for root accounts as well as for each user
