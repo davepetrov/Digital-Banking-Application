@@ -1,0 +1,37 @@
+{
+    "CIBC":{
+        "branches":[
+            "cibc-Richmondhill",
+            "cibc-Toronto",
+            "cibc-Thornhill"
+        ]
+    },
+    "TD":{
+        "branches":[
+            "td-Richmondhill",
+            "td-Toronto",
+            "td-Thornhill"
+        ]
+    },
+    "ScotiaBank":{
+        "branches":[
+            "scotia-Richmondhill",
+            "scotia-Toronto",
+            "scotia-Thornhill"
+        ]
+    },
+    "BMO":{
+        "branches":[
+            "bmo-Richmondhill",
+            "bmo-Toronto",
+            "bmo-Thornhill"
+        ]
+    },
+    "RBC":{
+        "branches":[
+            "rbc-Richmondhill",
+            "ribc-Toronto",
+            "rbc-Thornhill"
+        ]
+    }
+}

@@ -34,8 +34,8 @@ public class Bank {
         Branch branch = queryBranch(branchName);
         String id = generateId();
 
-        if (branch!=null && branch.addCustomer(id, email, name, amt)){
-            return true;
+        if (branch!=null){
+            return branch.addCustomer(id, email, name, amt);
         }
         return false;
     }
@@ -44,11 +44,12 @@ public class Bank {
         String customerId = getCustomerID(senderEmail);
         Branch s_branch = fetchBranch(customerId);
 
+        //Bank of sender validates that the recepient has a valid bank account;
         String recipientId = getCustomerID(recipientEmail);
-        Branch r_branch = fetchBranch(recipientEmail);
         Bank r_bank = Main.queryBank(recipientEmail);
+        Branch r_branch = r_bank.fetchBranch(recipientEmail);
 
-        if (r_branch!= null && s_branch!=null){
+        if (r_bank!=null && r_branch!= null && s_branch!=null){
             return s_branch.addTransaction(customerId, amt) && r_branch.addTransaction(recipientId, -1*amt);
         }
         return false;
@@ -67,7 +68,7 @@ public class Bank {
         for (int i =0; i<this.branches.size(); i++){
             Branch branch = branches.get(i);
             if (branch.hasCustomer(customerId)){
-                return branches.get(i);
+                return branch;
             }
         }
         return null;
@@ -77,7 +78,7 @@ public class Bank {
             Branch branch = branches.get(i);
             for (int j = 0; j<branch.getCustomers().size(); j++){
                 Customer customer = branch.getCustomers().get(i);
-                if (customer.getEmail().equals(customer)){
+                if (customer.getEmail().equals(customerEmail)){
                     return customer.getId();
                 }
             }
@@ -88,9 +89,11 @@ public class Bank {
         String customerId;
         if (query == 'e') {
             customerId = getCustomerID(identifier);
-        }
-        else{
+        } else if (query == 'i'){
             customerId = identifier;
+        } else{
+            System.out.println("Not a valid query identifier");
+            return false;
         }
         for (int i =0; i<this.branches.size(); i++){
             Branch branch = branches.get(i);
@@ -137,7 +140,8 @@ public class Bank {
             System.out.println("\nCustomer "+customer.getId());
             if (showTransaction) {
                 for (int j = 0; i < customer.getTransactions().size(); i++) {
-                    System.out.println("Transaction #" + j + ": " + customer.getTransactions().get(j));
+                    double transaction = customer.getTransactions().get(j);
+                    System.out.println("Transaction #" + (j+1) + ": " + transaction);
                 }
             }
         }
@@ -167,7 +171,8 @@ public class Bank {
 
     public void listBranches(){
         for (int i=0; i<branches.size(); i++){
-            System.out.println((i+1) + "->" +branches.get(i).getName());
+            Branch branch = branches.get(i);
+            System.out.println((i+1) + "->" +branch.getName());
         }
     }
 

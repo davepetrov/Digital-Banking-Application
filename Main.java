@@ -8,20 +8,7 @@ public class Main {
     private static ArrayList<Bank> banks = new ArrayList<Bank>();
     private static ArrayList<String> majorBanks = new ArrayList<>(Arrays.asList("CIBC", "TD", "ScotiaBank", "BMO", "RBC"));
 
-
     public static void main(String[] args) {
-        //User mode
-        String userEmail;
-        String recipientEmail;
-        Bank recipientBank;
-        double transaction;
-
-        //Root mode
-        String customerName;
-        String customerEmail;
-        String branchName;
-        double initDeposit;
-
         spawnBanks();
         System.out.println("Welcome to the ATM. Select you bank");
         printBanks();
@@ -31,6 +18,10 @@ public class Main {
         int mode = scanner.nextInt();scanner.nextLine();
         switch (mode){
             case 0:
+                String customerName;
+                String customerEmail;
+                String branchName;
+                double initDeposit;
                 printRootOptions();
                 while (!quit){
                     System.out.println("\n1 - Print Available Options");
@@ -80,6 +71,9 @@ public class Main {
                 }
                 break;
             case 1:
+                String userEmail;
+                String recipientEmail;
+                double transaction;
                 System.out.println("Entering ATM associated with "+bank.getName());
                 System.out.println("What is your registered email?"); //Add security token
                 userEmail = scanner.nextLine();
@@ -210,5 +204,9 @@ public class Main {
         System.out.println("4 - Customer Deposit");
         System.out.println("5 - Find my associated branch");
         System.out.println("6 - Current Balance");
+    }
+
+    private static void loadBanks(){
+
     }
 }
