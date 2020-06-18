@@ -22,3 +22,4 @@
 1. Add security token for root accounts as well as for each user
 2. Remove STD I/O and create a interactive display for the application (Will vary depending on modes)
 3. Add a Bank of Canada class to manage the schedule 1 banks
+4. OPTIMIZE
